@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Win $2,500.00 Cash - Spin to Win!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5em;
+            color: #ff3366;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 2px;
+        }
+
+        .header .amount {
+            font-size: 1.3em;
+            color: #2a5298;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .header .tagline {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .wheel-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .wheel-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2em;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto 30px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 15px solid #ffd700;
+            position: relative;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .wheel-segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+        }
+
+        .wheel-segment:nth-child(1) { background: #ff3366; transform: rotate(0deg); }
+        .wheel-segment:nth-child(2) { background: #ffcc00; transform: rotate(45deg); }
+        .wheel-segment:nth-child(3) { background: #33cc33; transform: rotate(90deg); }
+        .wheel-segment:nth-child(4) { background: #3366ff; transform: rotate(135deg); }
+        .wheel-segment:nth-child(5) { background: #ff6633; transform: rotate(180deg); }
+        .wheel-segment:nth-child(6) { background: #cc33ff; transform: rotate(225deg); }
+        .wheel-segment:nth-child(7) { background: #33ffcc; transform: rotate(270deg); }
+        .wheel-segment:nth-child(8) { background: #ff3399; transform: rotate(315deg); }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            border: 5px solid #ffd700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            color: #1e3c72;
+            font-size: 1.2em;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #ff3366;
+            z-index: 20;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
+        }
+
+        .prize-labels {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .prize-label {
+            position: absolute;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 0.75em;
+            color: white;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .prize-icon {
+            font-size: 2.5em;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
+        }
+
+        .prize-amount {
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
+        }
+
+        .spin-button {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8em;
+            padding: 20px 60px;
+            background: linear-gradient(135deg, #ff3366 0%, #ff6633 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 51, 102, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .spin-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 51, 102, 0.6);
+        }
+
+        .spin-button:active {
+            transform: translateY(0);
+        }
+
+        .spin-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.2em;
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .submit-button {
+            width: 100%;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.6em;
+            padding: 18px;
+            background: linear-gradient(135deg, #33cc33 0%, #66ff66 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(51, 204, 51, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(51, 204, 51, 0.6);
+        }
+
+        .testimonials {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonials-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2em;
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .testimonial-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .testimonial-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid #f0f0f0;
+        }
+
+        /* === Add-ons for more realistic avatars & social actions (testimonials only) === */
+        .testimonial-avatar {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-avatar::after {
+            content: "";
+            position: absolute;
+            right: 2px;
+            bottom: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #22c55e;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,.25);
+        }
+
+        .testimonial-avatar::before {
+            content: "";
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            border: 3px solid rgba(255,215,0,.35);
+            pointer-events: none;
+        }
+
+        .testimonial-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .testimonial-actions .action {
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .testimonial-actions .action:hover {
+            color: #2a5298;
+        }
+
+        .testimonial-actions .counts {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .testimonial-actions .counts { margin-left: 0; }
+        }
+        /* === End add-ons === */
+
+        .testimonial-content {
+            flex: 1;
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .testimonial-name {
+            font-weight: 700;
+            color: #1e3c72;
+            margin-right: 10px;
+            font-size: 1.05em;
+        }
+
+        .testimonial-verified {
+            background: #33cc33;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .testimonial-time {
+            color: #999;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        .testimonial-text {
+            color: #555;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .testimonial-stars {
+            color: #ffd700;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .winner-badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1e3c72;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 0.85em;
+            font-weight: 700;
+            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .wheel-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .prize-label {
+                font-size: 0.6em;
+            }
+
+            .prize-icon {
+                font-size: 2em;
+            }
+
+            .wheel-title {
+                font-size: 1.5em;
+            }
+
+            .spin-button {
+                font-size: 1.4em;
+                padding: 15px 40px;
+            }
+
+            .testimonial-avatar {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 8px 20px rgba(255, 51, 102, 0.4);
+            }
+            50% {
+                box-shadow: 0 8px 30px rgba(255, 51, 102, 0.8);
+            }
+            100% {
+                box-shadow: 0 8px 20px rgba(255, 51, 102, 0.4);
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff3366;
+            position: absolute;
+            animation: confetti-fall 3s linear;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Congratulations!</h1>
+            <div class="amount">You've Been Selected to Win $2,500.00 CASH!</div>
+            <div class="tagline">Spin the wheel and claim your prize today. Limited time offer!</div>
+        </div>
+
+        <div class="wheel-section">
+            <div class="wheel-title">Spin the Wheel to Reveal Your Prize!</div>
+            <div class="wheel-container">
+                <div class="wheel-pointer"></div>
+                <div class="wheel" id="wheel">
+                    <div class="wheel-segment"></div>
+                    <div class="wheel-segment"></div>
+                    <div class="wheel-segment"></div>
+                    <div class="wheel-segment"></div>
+                    <div class="wheel-segment"></div>
+                    <div class="wheel-segment"></div>
+                    <div class="wheel-segment"></div>
+                    <div class="wheel-segment"></div>
+                    <div class="wheel-center">SPIN</div>
+                    <div class="prize-labels">
+                        <div class="prize-label" style="top: 8%; left: 50%; transform: translateX(-50%);">
+                            <div class="prize-icon">🚗</div>
+                            <div class="prize-amount">$2,500</div>
+                        </div>
+                        <div class="prize-label" style="top: 22%; right: 15%; transform: rotate(45deg);">
+                            <div class="prize-icon">📱</div>
+                            <div class="prize-amount">$1,000</div>
+                        </div>
+                        <div class="prize-label" style="top: 50%; right: 8%; transform: translateY(-50%) rotate(90deg);">
+                            <div class="prize-icon">💎</div>
+                            <div class="prize-amount">$500</div>
+                        </div>
+                        <div class="prize-label" style="bottom: 22%; right: 15%; transform: rotate(135deg);">
+                            <div class="prize-icon">⌚</div>
+                            <div class="prize-amount">$250</div>
+                        </div>
+                        <div class="prize-label" style="bottom: 8%; left: 50%; transform: translateX(-50%) rotate(180deg);">
+                            <div class="prize-icon">🎧</div>
+                            <div class="prize-amount">$100</div>
+                        </div>
+                        <div class="prize-label" style="bottom: 22%; left: 15%; transform: rotate(225deg);">
+                            <div class="prize-icon">💰</div>
+                            <div class="prize-amount">$2,500</div>
+                        </div>
+                        <div class="prize-label" style="top: 50%; left: 8%; transform: translateY(-50%) rotate(270deg);">
+                            <div class="prize-icon">🏠</div>
+                            <div class="prize-amount">$750</div>
+                        </div>
+                        <div class="prize-label" style="top: 22%; left: 15%; transform: rotate(315deg);">
+                            <div class="prize-icon">💵</div>
+                            <div class="prize-amount">$2,500</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="spin-button pulse" id="spinButton">SPIN NOW!</button>
+        </div>
+
+        <div class="form-section" id="formSection">
+            <h2 class="form-title">🎉 You Won $2,500.00! 🎉</h2>
+            <p class="form-subtitle">Enter your information below to claim your prize</p>
+            <form id="prizeForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" name="fullName" required placeholder="John Smith">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required placeholder="john.smith@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                </div>
+                <div class="form-group">
+                    <label for="zipCode">ZIP Code *</label>
+                    <input type="text" id="zipCode" name="zipCode" required placeholder="12345">
+                </div>
+                <button type="submit" class="submit-button">CLAIM MY $2,500 NOW!</button>
+            </form>
+        </div>
+
+        <div class="testimonials">
+            <h3 class="testimonials-title">Recent Winners</h3>
+            
+            <div class="testimonial-item">
+                <div class="testimonial-avatar" style="background-image: url('https://randomuser.me/api/portraits/women/44.jpg');"></div>
+                <div class="testimonial-content">
+                    <div class="testimonial-header">
+                        <span class="testimonial-name">Jennifer Martinez</span>
+                        <span class="testimonial-verified">✓ Verified Winner</span>
+                    </div>
+                    <div class="testimonial-stars">★★★★★</div>
+                    <div class="testimonial-time">2 hours ago</div>
+                    <div class="testimonial-text">I couldn't believe it at first! I actually won $2,500! The money was deposited into my account within 48 hours. This is completely legit and I'm so grateful!</div>
+                    <div class="winner-badge">💰 Won $2,500.00</div>
+
+                    <div class="testimonial-actions">
+                        <span class="action">Like</span>
+                        <span class="action">Reply</span>
+                        <span class="action">Share</span>
+                        <div class="counts">
+                            <span>👍 <span class="like-num">128</span></span>
+                            <span>💬 <span class="reply-num">9</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-item">
+                <div class="testimonial-avatar" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg');"></div>
+                <div class="testimonial-content">
+                    <div class="testimonial-header">
+                        <span class="testimonial-name">Michael Thompson</span>
+                        <span class="testimonial-verified">✓ Verified Winner</span>
+                    </div>
+                    <div class="testimonial-stars">★★★★★</div>
+                    <div class="testimonial-time">5 hours ago</div>
+                    <div class="testimonial-text">Wow! I spun the wheel and won $1,000. The whole process was super easy and straightforward. Received my payment via check in the mail. Highly recommend!</div>
+                    <div class="winner-badge">💰 Won $1,000.00</div>
+
+                    <div class="testimonial-actions">
+                        <span class="action">Like</span>
+                        <span class="action">Reply</span>
+                        <span class="action">Share</span>
+                        <div class="counts">
+                            <span>👍 <span class="like-num">86</span></span>
+                            <span>💬 <span class="reply-num">4</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-item">
+                <div class="testimonial-avatar" style="background-image: url('https://randomuser.me/api/portraits/women/65.jpg');"></div>
+                <div class="testimonial-content">
+                    <div class="testimonial-header">
+                        <span class="testimonial-name">Sarah Johnson</span>
+                        <span class="testimonial-verified">✓ Verified Winner</span>
+                    </div>
+                    <div class="testimonial-stars">★★★★★</div>
+                    <div class="testimonial-time">1 day ago</div>
+                    <div class="testimonial-text">This helped me pay off my credit card debt! I won $750 and it came through exactly as promised. Thank you so much for this amazing opportunity!</div>
+                    <div class="winner-badge">💰 Won $750.00</div>
+
+                    <div class="testimonial-actions">
+                        <span class="action">Like</span>
+                        <span class="action">Reply</span>
+                        <span class="action">Share</span>
+                        <div class="counts">
+                            <span>👍 <span class="like-num">203</span></span>
+                            <span>💬 <span class="reply-num">13</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-item">
+                <div class="testimonial-avatar" style="background-image: url('https://randomuser.me/api/portraits/men/46.jpg');"></div>
+                <div class="testimonial-content">
+                    <div class="testimonial-header">
+                        <span class="testimonial-name">David Rodriguez</span>
+                        <span class="testimonial-verified">✓ Verified Winner</span>
+                    </div>
+                    <div class="testimonial-stars">★★★★★</div>
+                    <div class="testimonial-time">1 day ago</div>
+                    <div class="testimonial-text">I was skeptical at first, but this is the real deal. Won $500 and got it deposited to my PayPal account. Fast and easy process!</div>
+                    <div class="winner-badge">💰 Won $500.00</div>
+
+                    <div class="testimonial-actions">
+                        <span class="action">Like</span>
+                        <span class="action">Reply</span>
+                        <span class="action">Share</span>
+                        <div class="counts">
+                            <span>👍 <span class="like-num">61</span></span>
+                            <span>💬 <span class="reply-num">2</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-item">
+                <div class="testimonial-avatar" style="background-image: url('https://randomuser.me/api/portraits/women/26.jpg');"></div>
+                <div class="testimonial-content">
+                    <div class="testimonial-header">
+                        <span class="testimonial-name">Emily Chen</span>
+                        <span class="testimonial-verified">✓ Verified Winner</span>
+                    </div>
+                    <div class="testimonial-stars">★★★★★</div>
+                    <div class="testimonial-time">2 days ago</div>
+                    <div class="testimonial-text">Just received my $2,500 prize! This couldn't have come at a better time. The verification process was quick and the payout was exactly what they promised. Amazing!</div>
+                    <div class="winner-badge">💰 Won $2,500.00</div>
+
+                    <div class="testimonial-actions">
+                        <span class="action">Like</span>
+                        <span class="action">Reply</span>
+                        <span class="action">Share</span>
+                        <div class="counts">
+                            <span>👍 <span class="like-num">142</span></span>
+                            <span>💬 <span class="reply-num">6</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const wheel = document.getElementById('wheel');
+        const spinButton = document.getElementById('spinButton');
+        const formSection = document.getElementById('formSection');
+        let hasSpun = false;
+
+        spinButton.addEventListener('click', function() {
+            if (hasSpun) return;
+            
+            hasSpun = true;
+            spinButton.disabled = true;
+            spinButton.classList.remove('pulse');
+            
+            // Random rotation between 5-8 full spins, landing on $2,500 (0 degrees)
+            const spins = 5 + Math.random() * 3;
+            const extraDegrees = 0; // Land on $2,500
+            const totalRotation = (spins * 360) + extraDegrees;
+            
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            
+            // Create confetti effect
+            setTimeout(() => {
+                createConfetti();
+            }, 3800);
+            
+            // Show form after spin completes
+            setTimeout(() => {
+                formSection.classList.add('active');
+                formSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 4200);
+        });
+
+        function createConfetti() {
+            const colors = ['#ff3366', '#ffcc00', '#33cc33', '#3366ff', '#ffd700'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 20);
+            }
+        }
+
+        document.getElementById('prizeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                zipCode: document.getElementById('zipCode').value,
+                prize: '$2,500.00'
+            };
+            
+            // Here you would normally send the data to your server
+            console.log('Form submitted:', formData);
+            
+            // Show success message
+            alert('Thank you! Your prize claim has been submitted. You will receive confirmation via email within 24 hours.');
+        });
+    </script>
+</body>
+</html>
