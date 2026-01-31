@@ -206,74 +206,46 @@
             box-shadow: none;
         }
 
-        .form-section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            margin-bottom: 30px;
+        .win-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
             display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 999;
         }
 
-        .form-section.active {
-            display: block;
-            animation: slideIn 0.5s ease;
+        .win-modal.active {
+            display: flex;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .win-modal-content {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 24px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
         }
 
-        .form-title {
+        .win-modal-content h2 {
             font-family: 'Oswald', sans-serif;
             font-size: 2.2em;
             color: #1e3c72;
-            text-align: center;
-            margin-bottom: 10px;
             text-transform: uppercase;
+            margin-bottom: 10px;
         }
 
-        .form-subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+        .win-modal-content p {
+            font-size: 1.05em;
+            color: #555;
+            margin-bottom: 18px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: border-color 0.3s ease;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #2a5298;
-        }
-
-        .submit-button {
+        .claim-button {
             width: 100%;
             font-family: 'Oswald', sans-serif;
             font-size: 1.6em;
@@ -290,7 +262,7 @@
             font-weight: 700;
         }
 
-        .submit-button:hover {
+        .claim-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(51, 204, 51, 0.6);
         }
@@ -581,33 +553,9 @@
             <button class="spin-button pulse" id="spinButton">SPIN NOW!</button>
         </div>
 
-        <div class="form-section" id="formSection">
-            <h2 class="form-title">🎉 You Won $2,500.00! 🎉</h2>
-            <p class="form-subtitle">Enter your information below to claim your prize</p>
-            <form id="prizeForm">
-                <div class="form-group">
-                    <label for="fullName">Full Name *</label>
-                    <input type="text" id="fullName" name="fullName" required placeholder="John Smith">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required placeholder="john.smith@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number *</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
-                </div>
-                <div class="form-group">
-                    <label for="zipCode">ZIP Code *</label>
-                    <input type="text" id="zipCode" name="zipCode" required placeholder="12345">
-                </div>
-                <button type="submit" class="submit-button">CLAIM MY $2,500 NOW!</button>
-            </form>
-        </div>
-
         <div class="testimonials">
             <h3 class="testimonials-title">Recent Winners</h3>
-            
+
             <div class="testimonial-item">
                 <div class="testimonial-avatar" style="background-image: url('https://randomuser.me/api/portraits/women/44.jpg');"></div>
                 <div class="testimonial-content">
@@ -730,36 +678,51 @@
         </div>
     </div>
 
+    <div class="win-modal" id="winModal" aria-hidden="true">
+        <div class="win-modal-content" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+            <h2 id="winTitle">🎉 Congratulations!</h2>
+            <p>You’ve won $2,500.00 CASH. Click below to claim your prize.</p>
+            <button class="claim-button" id="claimButton">Claim My $2,500 Now</button>
+        </div>
+    </div>
+
     <script>
         const wheel = document.getElementById('wheel');
         const spinButton = document.getElementById('spinButton');
-        const formSection = document.getElementById('formSection');
+        const winModal = document.getElementById('winModal');
+        const claimButton = document.getElementById('claimButton');
         let hasSpun = false;
 
         spinButton.addEventListener('click', function() {
             if (hasSpun) return;
-            
+
             hasSpun = true;
             spinButton.disabled = true;
             spinButton.classList.remove('pulse');
-            
+
             // Random rotation between 5-8 full spins, landing on $2,500 (0 degrees)
             const spins = 5 + Math.random() * 3;
             const extraDegrees = 0; // Land on $2,500
             const totalRotation = (spins * 360) + extraDegrees;
-            
+
             wheel.style.transform = `rotate(${totalRotation}deg)`;
-            
+
             // Create confetti effect
             setTimeout(() => {
                 createConfetti();
             }, 3800);
-            
-            // Show form after spin completes
+
+            // Show claim modal after spin completes
             setTimeout(() => {
-                formSection.classList.add('active');
-                formSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                winModal.classList.add('active');
+                winModal.setAttribute('aria-hidden', 'false');
             }, 4200);
+        });
+
+        claimButton.addEventListener('click', function() {
+            winModal.classList.remove('active');
+            winModal.setAttribute('aria-hidden', 'true');
+            alert('Your claim has been started. Please follow the next steps to complete.');
         });
 
         function createConfetti() {
@@ -772,30 +735,11 @@
                     confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
                     confetti.style.animationDelay = Math.random() * 0.5 + 's';
                     document.body.appendChild(confetti);
-                    
+
                     setTimeout(() => confetti.remove(), 3000);
                 }, i * 20);
             }
         }
-
-        document.getElementById('prizeForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = {
-                fullName: document.getElementById('fullName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                zipCode: document.getElementById('zipCode').value,
-                prize: '$2,500.00'
-            };
-            
-            // Here you would normally send the data to your server
-            console.log('Form submitted:', formData);
-            
-            // Show success message
-            alert('Thank you! Your prize claim has been submitted. You will receive confirmation via email within 24 hours.');
-        });
     </script>
 </body>
 </html>
